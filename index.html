@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Ecommerce</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/modal.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <h1>Mi Ecommerce</h1>
+
+    <nav class="main-nav">
+      <a href="productos.html"><button id="viewProductsBtn">Ver Productos</button></a>
+
+      <!-- Auth buttons -->
+      <button id="loginBtn" class="button">Iniciar Sesión</button>
+      <button id="signupBtn" class="button">Registrarse</button>
+
+      <!-- Cerrar Sesion (solo visible si está logueado) -->
+      <button id="profileBtn" class="button" style="display: none;">Cerrar Sesión</button>
+    </nav>
+  </header>
+
+  <!-- MODAL REGISTRO -->
+  <div id="signupModal" class="modal">
+    <div class="modal-content">
+      <span class="close" data-close="signup">&times;</span>
+
+      <h2>Registrarse</h2>
+
+      <form id="signupForm">
+        <input id="firstName" type="text" placeholder="Nombre" required>
+        <input id="lastName" type="text" placeholder="Apellido" required>
+        <input id="signupEmail" type="email" placeholder="Email" required>
+        <input id="phone" type="tel" placeholder="Teléfono" required>
+        <input id="signupPassword" type="password" placeholder="Contraseña" required>
+
+        <button type="submit">Registrarse</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL LOGIN -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close" data-close="login">&times;</span>
+
+      <h2>Iniciar Sesión</h2>
+
+      <form id="loginForm">
+        <input id="loginEmail" type="email" placeholder="Correo electrónico" required>
+        <input id="loginPassword" type="password" placeholder="Contraseña" required>
+
+        <button type="submit">Ingresar</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

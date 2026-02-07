@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <h1>Mi Ecommerce</h1>
+        <nav class="main-nav">
+        <a href="index.html"><button id="index-btn" class="button">Inicio</button></a>
+
+        <!--Barra de Búsqueda--> 
+        <div class="group">
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="search-icon">
+                <g>
+                    <path
+                        d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"
+                    ></path>
+                </g>
+            </svg>
+
+            <input
+                id="query"
+                class="input"
+                type="search"
+                placeholder="Search..."
+                name="searchbar"
+            />
+        </div>
+
+
+        <!-- Cerrar Sesion (solo visible si está logueado) -->
+        <button id="profileBtn" class="button" style="display: none;">Cerrar Sesión</button>
+        </nav>
+    </header>
+
+    <main class="products-page">
+
+        <!-- Sidebar -->
+        <aside class="filters">
+            <h2>Filtros</h2>
+
+            <div class="filter-group">
+            <label>Buscar</label>
+            <input type="text" placeholder="Buscar componente...">
+            </div>
+
+            <div class="filter-group">
+            <h3>Categoría</h3>
+            <label><input type="checkbox"> CPU</label>
+            <label><input type="checkbox"> GPU</label>
+            <label><input type="checkbox"> Motherboard</label>
+            <label><input type="checkbox"> RAM</label>
+            <label><input type="checkbox"> Almacenamiento</label>
+            <label><input type="checkbox"> Fuente</label>
+            </div>
+
+            <div class="filter-group">
+            <h3>Precio</h3>
+            <input type="range" min="0" max="500000">
+            </div>
+
+            <div class="filter-group">
+            <label>
+                <input type="checkbox"> Solo productos con stock
+            </label>
+            </div>
+        </aside>
+
+        <!-- Productos -->
+        <section class="products">
+            <div id="product-cards" class="products-grid"></div>
+        </section>
+
+    </main>
+
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
