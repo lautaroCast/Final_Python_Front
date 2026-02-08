@@ -1,5 +1,6 @@
 let allProducts = [];
 let searchText = "";
+let selectedCategories = [];
 
 // ===============================
 // Imports
@@ -20,6 +21,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initProductEvents();
   initHeaderSearch();
   initSidebarSearch();
+  initCategoryFilters()
 
   const productCards = document.getElementById("product-cards");
 
@@ -131,9 +133,17 @@ function initProductEvents() {
 function aplicarFiltros() {
   let filtrados = allProducts;
 
+  //  Filtro por texto
   if (searchText.trim() !== "") {
     filtrados = filtrados.filter(producto =>
       producto.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+  }
+
+  //  Filtro por categoría
+  if (selectedCategories.length > 0) {
+    filtrados = filtrados.filter(producto =>
+      selectedCategories.includes(producto.category_id)
     );
   }
 
@@ -160,4 +170,21 @@ function initHeaderSearch() {
   });
 }
 
+function initCategoryFilters() {
+  const checkboxes = document.querySelectorAll(".filters input[type='checkbox']");
+
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener("change", () => {
+      const categoryId = Number(checkbox.value);
+
+      if (checkbox.checked) {
+        selectedCategories.push(categoryId);
+      } else {
+        selectedCategories = selectedCategories.filter(id => id !== categoryId);
+      }
+
+      aplicarFiltros();
+    });
+  });
+}
 
