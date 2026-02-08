@@ -1,4 +1,5 @@
-console.log("🟢 main.js cargado");
+let allProducts = [];
+let searchText = "";
 
 // ===============================
 // Imports
@@ -17,17 +18,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   updateAuthUI(isLoggedIn());
   initAuthEvents();
   initProductEvents();
+  initHeaderSearch();
+  initSidebarSearch();
 
-  // ✅ CARGA AUTOMÁTICA DE PRODUCTOS (productos.html)
   const productCards = document.getElementById("product-cards");
 
   if (productCards) {
-    console.log("🟢 Estamos en productos.html, cargando productos...");
-
+    
     try {
       const products = await getProducts();
-      console.log("📦 Productos recibidos:", products);
-      renderProducts(products);
+      allProducts = products;
+      renderProducts(allProducts);
     } catch (error) {
       console.error(error);
       alert(error.message);
@@ -64,7 +65,7 @@ function initSignup() {
       registerAuth(userData.email, userData.password);
       await createClient(userData);
 
-      alert("Registro exitoso ✅");
+      alert("Registro exitoso");
       closeModal("signup");
       updateAuthUI(true);
 
@@ -87,7 +88,7 @@ function initLogin() {
     try {
       loginAuth(email, password);
 
-      alert("Login exitoso 👌");
+      alert("Login exitoso");
       closeModal("login");
       updateAuthUI(true);
 
@@ -122,3 +123,41 @@ function initProductEvents() {
     window.location.href = "productos.html";
   });
 }
+
+// ===============================
+// Barra de búsqueda (productos.thml)
+// ===============================
+
+function aplicarFiltros() {
+  let filtrados = allProducts;
+
+  if (searchText.trim() !== "") {
+    filtrados = filtrados.filter(producto =>
+      producto.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+  }
+
+  renderProducts(filtrados);
+}
+
+function initSidebarSearch() {
+  const sidebarInput = document.getElementById("searchInput");
+  if (!sidebarInput) return;
+
+  sidebarInput.addEventListener("input", e => {
+    searchText = e.target.value;
+    aplicarFiltros();
+  });
+}
+
+function initHeaderSearch() {
+  const headerInput = document.getElementById("query");
+  if (!headerInput) return;
+
+  headerInput.addEventListener("input", e => {
+    searchText = e.target.value;
+    aplicarFiltros();
+  });
+}
+
+

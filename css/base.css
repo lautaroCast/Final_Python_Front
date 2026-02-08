@@ -40,7 +40,7 @@ body {
   background-color: #666666;
   color: #ffffff;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -69,11 +69,11 @@ body {
 .input {
   font-family: "Montserrat", sans-serif;
   width: 100%;
-  height: 45px;
+  height: 38px;
   padding-left: 2.5rem;
   box-shadow: 0 0 0 1.5px #2b2c37, 0 0 25px -17px #000;
   border: 0;
-  border-radius: 12px;
+  border-radius: 10px;
   background-color: #16171d;
   outline: none;
   color: #bdbecb;
@@ -111,17 +111,20 @@ body {
 /* PÁGINA DE PRODUCTOS */
 
 .products-page {
-  display: grid;
-  grid-template-columns: 260px 1fr;
+  display: flex;
   gap: 24px;
   padding: 24px;
 }
 
+
 .filters {
-  background-color: #f8f8f8;
+  width: 260px;
+  background-color: #f8f9fa;
   padding: 20px;
   border-radius: 8px;
   height: fit-content;
+  position: sticky;
+  top: 100px;
 }
 
 .filters h2 {
@@ -132,6 +135,10 @@ body {
   margin-bottom: 20px;
 }
 
+.filter-group h3 {
+  margin-bottom: 8px;
+}
+
 .filter-group label {
   display: block;
   margin-bottom: 6px;
@@ -139,34 +146,41 @@ body {
 }
 
 .filter-group input[type="text"] {
-  width: 100%;
+  width: 90%;
   padding: 8px;
+}
+
+.products {
+  flex: 1;
 }
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
 }
 
 .card {
   background-color: #ffffff;
   border-radius: 8px;
   padding: 16px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.card:hover{
+  transform: translateY(-4px);
 }
 
 .card img {
   max-width: 100%;
-  height: 160px;
-  object-fit: cover;
-  margin-bottom: 12px;
+  height: 180px;
+  object-fit: contain;
 }
 
 .card h3 {
   font-size: 18px;
-  margin-bottom: 8px;
+  margin-bottom: 12px 0 8px;
 }
 
 .card p {
