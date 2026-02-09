@@ -63,17 +63,24 @@
                 <label><input type="checkbox" class="category-checkbox" value="6"> Teclado</label>
                 <label><input type="checkbox" class="category-checkbox" value="7"> Monitor</label>
                 <label><input type="checkbox" class="category-checkbox" value="8"> Mouse</label>
-                </div>
+            </div>
             <div class="filter-group">
-                
-            <h3>Precio</h3>
-            <input type="range" min="0" max="500000">
+
+                <h3>Precio</h3>
+                <input
+                    type="range"
+                    id="priceRange"
+                    min="0"
+                    max="0"
+                />
+
+                <p id="priceValue">$0</p>
             </div>
 
             <div class="filter-group">
-            <label>
-                <input type="checkbox" id="stockFilter"> Solo productos con stock
-            </label>
+                <label>
+                    <input type="checkbox" id="stockFilter"> Solo productos con stock
+                </label>
             </div>
         </aside>
 

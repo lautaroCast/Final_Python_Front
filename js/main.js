@@ -1,7 +1,11 @@
 let allProducts = [];
+let filteredProducts = [];
 let searchText = "";
 let selectedCategories = [];
 let onlyWithStock = false;
+let minPrice = 0;
+let maxPrice = Infinity;
+
 
 
 // ===============================
@@ -24,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initHeaderSearch();
   initSidebarSearch();
   initStockFilter();
-  initCategoryFilters()
+  initCategoryFilters();
   
 
   const productCards = document.getElementById("product-cards");
@@ -34,7 +38,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       const products = await getProducts();
       allProducts = products;
-      renderProducts(allProducts);
+
+      initPriceFilter(products);
+      aplicarFiltros();
+      
     } catch (error) {
       console.error(error);
       alert(error.message);
@@ -156,6 +163,11 @@ function aplicarFiltros() {
     filtrados = filtrados.filter(producto => producto.stock > 0);
   }
 
+  // Filtro por Precio
+  filtrados = filtrados.filter(producto =>
+    producto.price >= minPrice && producto.price <= maxPrice
+  );
+
   renderProducts(filtrados);
 }
 
@@ -209,4 +221,28 @@ function initStockFilter() {
     aplicarFiltros();
   });
 }
+
+function initPriceFilter(products) {
+  const priceRange = document.getElementById("priceRange");
+  const priceValue = document.getElementById("priceValue");
+
+  if (!priceRange || !priceValue) return;
+
+  const maxProductPrice = Math.max(...products.map(p => p.price));
+
+  priceRange.min = 0;
+  priceRange.max = maxProductPrice;
+  priceRange.value = maxProductPrice;
+
+  maxPrice = maxProductPrice;
+  priceValue.textContent = `$${maxProductPrice}`;
+
+  priceRange.addEventListener("input", () => {
+    maxPrice = Number(priceRange.value);
+    priceValue.textContent = `$${maxPrice}`;
+    aplicarFiltros();
+  });
+}
+
+
 

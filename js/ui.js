@@ -90,6 +90,15 @@ export function renderProducts(products) {
     return;
   }
 
+  if (products.length === 0) {
+    productList.innerHTML = `
+      <div class="no-results">
+        <p>No hay productos que coincidan con los filtros</p>
+      </div>
+    `;
+    return;
+  }
+
   let html = "";
   products.forEach(producto => {
     html += crearCardProducto(producto);
