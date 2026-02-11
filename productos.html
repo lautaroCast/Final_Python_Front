@@ -38,6 +38,23 @@
 
         <!-- Cerrar Sesion (solo visible si está logueado) -->
         <button id="profileBtn" class="button" style="display: none;">Cerrar Sesión</button>
+        <!-- Botón carrito en el header -->
+        <button id="cart-btn">
+            🛒 <span id="cart-count">0</span>
+        </button>
+
+        <!-- Panel lateral -->
+        <aside id="cart-panel" class="cart-hidden">
+            <h3>Tu carrito</h3>
+
+            <div id="cart-items"></div>
+
+            <div class="cart-footer">
+                <p>Total: $<span id="cart-total">0</span></p>
+                <button id="buy-btn">Comprar</button>
+            </div>
+        </aside>
+
         </nav>
     </header>
 

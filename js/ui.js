@@ -107,3 +107,33 @@ export function renderProducts(products) {
   productList.innerHTML = html;
 }
 
+export function renderCart() {
+  const container = document.getElementById("cart-items");
+  const totalEl = document.getElementById("cart-total");
+  const countEl = document.getElementById("cart-count");
+
+  container.innerHTML = "";
+
+  cart.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "cart-item";
+
+    div.innerHTML = `
+      <div>
+        <strong>${item.name}</strong>
+        <p>$${item.price}</p>
+      </div>
+      <div>
+        <button onclick="decreaseQuantity(${item.id})">-</button>
+        <span>${item.quantity}</span>
+        <button onclick="increaseQuantity(${item.id})">+</button>
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+
+  totalEl.textContent = calculateTotal();
+  countEl.textContent = cart.reduce((acc, i) => acc + i.quantity, 0);
+}
+

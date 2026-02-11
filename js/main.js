@@ -5,6 +5,7 @@ let selectedCategories = [];
 let onlyWithStock = false;
 let minPrice = 0;
 let maxPrice = Infinity;
+let cart = [];
 
 
 
@@ -12,7 +13,7 @@ let maxPrice = Infinity;
 // Imports
 // ===============================
 
-import { initUI, renderProducts, updateAuthUI, closeModal } from "./ui.js";
+import { initUI, renderProducts, renderCart, updateAuthUI, closeModal } from "./ui.js";
 import { registerAuth, loginAuth, logoutAuth, isLoggedIn } from "./auth.js";
 import { createClient, getProducts } from "./api.js";
 
@@ -29,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initSidebarSearch();
   initStockFilter();
   initCategoryFilters();
-  
+  initCartUI();
 
   const productCards = document.getElementById("product-cards");
 
@@ -244,5 +245,59 @@ function initPriceFilter(products) {
   });
 }
 
+// ===============================
+// Cart UI
+// ===============================
 
+function initCartUI() {
+  const cartBtn = document.getElementById("cart-btn");
+  const cartPanel = document.getElementById("cart-panel");
+
+  if (!cartBtn || !cartPanel) return;
+
+  cartBtn.addEventListener("click", () => {
+    cartPanel.classList.toggle("cart-hidden");
+  });
+}
+
+
+
+
+function addToCart(product) {
+  const existing = cart.find(item => item.id === product.id);
+  if (existing) {
+    existing.quantity++;
+  }else {
+    cart.push({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: 1
+    })
+  }
+  renderCart();
+}
+
+function increaseQuantity(productId) {
+  const item = cart.find(p => p.id === productId);
+  if (!item) return;
+  item.quantity++;
+  renderCart();
+}
+
+function decreaseQuantity(productId) {
+  const item = cart.find(p => p.id === productId);
+  if (!item) return;
+  item.quantity--;
+
+  if (item.quantity === 0) {
+    cart = cart.filter(p => p.id != productId);
+  }
+  renderCart();
+}
+
+function calculateTotal() {
+  return cart.reduce(
+    (total, item) => total + item.price * item.quantity, 0);
+}
 
