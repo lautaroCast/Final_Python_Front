@@ -1,3 +1,7 @@
+let onIncrease = null;
+let onDecrease = null;
+let onAddToCart = null;
+
 // ===============================
 // UI – Modales
 // ===============================
@@ -16,23 +20,20 @@ export function closeModal(type) {
 }
 
 // ===============================
-// UI – Inicialización de eventos
+// UI – Inicialización
 // ===============================
 
 export function initUI() {
-  // Botones del header
   const signupBtn = document.getElementById("signupBtn");
   const loginBtn = document.getElementById("loginBtn");
 
   if (signupBtn) signupBtn.onclick = () => openModal("signup");
   if (loginBtn) loginBtn.onclick = () => openModal("login");
 
-  // Botones cerrar modal
   document.querySelectorAll(".close").forEach(btn => {
     btn.onclick = () => closeModal(btn.dataset.close);
   });
 
-  // Click fuera del modal
   window.onclick = e => {
     if (e.target === signupModal) closeModal("signup");
     if (e.target === loginModal) closeModal("login");
@@ -75,20 +76,29 @@ export function crearCardProducto(producto) {
       <h3>${producto.name}</h3>
       <p>Precio: $${producto.price}</p>
       <p>${producto.stock > 0 ? "Stock disponible" : "Sin stock"}</p>
+      <button 
+        class="add-to-cart-btn" 
+        data-id="${producto.id_key}"
+        ${producto.stock === 0 ? "disabled" : ""}
+      >
+        Agregar al carrito
+      </button>
     </div>
   `;
 }
 
+export function setCartHandlers(increaseHandler, decreaseHandler) {
+  onIncrease = increaseHandler;
+  onDecrease = decreaseHandler;
+}
+
+export function setAddToCartHandler(handler) {
+  onAddToCart = handler;
+}
 
 export function renderProducts(products) {
-  console.log("renderProducts ejecutada");
-  console.log("products recibidos:", products);
-
   const productList = document.getElementById("product-cards");
-  if (!productList) {
-    console.error("No se encontró #product-cards");
-    return;
-  }
+  if (!productList) return;
 
   if (products.length === 0) {
     productList.innerHTML = `
@@ -99,41 +109,67 @@ export function renderProducts(products) {
     return;
   }
 
-  let html = "";
-  products.forEach(producto => {
-    html += crearCardProducto(producto);
-  });
+  productList.innerHTML = products
+    .map(producto => crearCardProducto(producto))
+    .join("");
 
-  productList.innerHTML = html;
+  const buttons = productList.querySelectorAll(".add-to-cart-btn");
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (!onAddToCart) return;
+      const productId = Number(btn.dataset.id);
+      onAddToCart(productId);
+    });
+  });
 }
 
-export function renderCart() {
+// ===============================
+// UI – Carrito
+// ===============================
+
+export function renderCart(cart, total) {
   const container = document.getElementById("cart-items");
   const totalEl = document.getElementById("cart-total");
   const countEl = document.getElementById("cart-count");
 
-  container.innerHTML = "";
+  if (!container || !totalEl || !countEl) return;
 
-  cart.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "cart-item";
+  if (cart.length === 0) {
+    container.innerHTML = "<p>El carrito está vacío</p>";
+    totalEl.textContent = "0";
+    countEl.textContent = "0";
+    return;
+  }
 
-    div.innerHTML = `
+  container.innerHTML = cart.map(item => `
+    <div class="cart-item">
       <div>
         <strong>${item.name}</strong>
         <p>$${item.price}</p>
       </div>
       <div>
-        <button onclick="decreaseQuantity(${item.id})">-</button>
+        <button class="decrease-btn" data-id="${item.id}">-</button>
         <span>${item.quantity}</span>
-        <button onclick="increaseQuantity(${item.id})">+</button>
+        <button class="increase-btn" data-id="${item.id}">+</button>
       </div>
-    `;
+    </div>
+  `).join("");
 
-    container.appendChild(div);
+  totalEl.textContent = total;
+  countEl.textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+  container.querySelectorAll(".increase-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = Number(btn.dataset.id);
+      if (onIncrease) onIncrease(id);
+    });
   });
 
-  totalEl.textContent = calculateTotal();
-  countEl.textContent = cart.reduce((acc, i) => acc + i.quantity, 0);
+  container.querySelectorAll(".decrease-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = Number(btn.dataset.id);
+      if (onDecrease) onDecrease(id);
+    });
+  });
 }
-

@@ -13,7 +13,7 @@ let cart = [];
 // Imports
 // ===============================
 
-import { initUI, renderProducts, renderCart, updateAuthUI, closeModal } from "./ui.js";
+import { initUI, renderProducts, renderCart, updateAuthUI, closeModal, setAddToCartHandler, setCartHandlers } from "./ui.js";
 import { registerAuth, loginAuth, logoutAuth, isLoggedIn } from "./auth.js";
 import { createClient, getProducts } from "./api.js";
 
@@ -48,6 +48,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       alert(error.message);
     }
   }
+  setAddToCartHandler(productId => {
+    const product = allProducts.find(p => p.id_key === productId);
+    if (!product) return;
+
+    addToCart(product);
+  });
+  setCartHandlers(
+    increaseQuantity,
+    decreaseQuantity
+  );
+
 });
 
 // ===============================
@@ -259,45 +270,46 @@ function initCartUI() {
     cartPanel.classList.toggle("cart-hidden");
   });
 }
-
-
-
+function calculateTotal() {
+  return cart.reduce(
+    (total, item) => total + item.price * item.quantity,0
+  );
+}
 
 function addToCart(product) {
-  const existing = cart.find(item => item.id === product.id);
+  const existing = cart.find(item => item.id === product.id_key);
+
   if (existing) {
     existing.quantity++;
-  }else {
+  } else {
     cart.push({
-      id: product.id,
+      id: product.id_key,
       name: product.name,
       price: product.price,
       quantity: 1
-    })
+    });
   }
-  renderCart();
+
+  renderCart(cart, calculateTotal());
 }
 
-function increaseQuantity(productId) {
-  const item = cart.find(p => p.id === productId);
+function increaseQuantity(id) {
+  const item = cart.find(p => p.id === id);
   if (!item) return;
+
   item.quantity++;
-  renderCart();
+  renderCart(cart, calculateTotal());
 }
 
-function decreaseQuantity(productId) {
-  const item = cart.find(p => p.id === productId);
+function decreaseQuantity(id) {
+  const item = cart.find(p => p.id === id);
   if (!item) return;
+
   item.quantity--;
 
-  if (item.quantity === 0) {
-    cart = cart.filter(p => p.id != productId);
+  if (item.quantity <= 0) {
+    cart = cart.filter(p => p.id !== id);
   }
-  renderCart();
-}
 
-function calculateTotal() {
-  return cart.reduce(
-    (total, item) => total + item.price * item.quantity, 0);
+  renderCart(cart, calculateTotal());
 }
-
